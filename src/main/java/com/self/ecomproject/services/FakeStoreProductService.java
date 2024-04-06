@@ -6,6 +6,7 @@ import com.self.ecomproject.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class FakeStoreProductService implements ProductService{
@@ -46,6 +47,17 @@ public class FakeStoreProductService implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        FakeStoreProductDTO[] fakeStoreProductDTOs =
+                restTemplate.getForObject("https://fakestoreapi.com/products",
+                FakeStoreProductDTO[].class);
+
+        //System.out.println("Debug"); //to check response type
+
+        //Convert List of FakeStoreProductDTO into List of Products.
+        List<Product> response = new ArrayList<>();
+        for (FakeStoreProductDTO fakeStoreProductDTO : fakeStoreProductDTOs) {
+            response.add(covertFakeStoreProductDtoToProduct(fakeStoreProductDTO));
+        }
+        return response;
     }
 }
