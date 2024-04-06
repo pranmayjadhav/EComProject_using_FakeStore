@@ -3,7 +3,10 @@ package com.self.ecomproject.services;
 import com.self.ecomproject.dtos.FakeStoreProductDTO;
 import com.self.ecomproject.models.Category;
 import com.self.ecomproject.models.Product;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class FakeStoreProductService implements ProductService{
     public List<Product> getAllProducts() {
         FakeStoreProductDTO[] fakeStoreProductDTOs =
                 restTemplate.getForObject("https://fakestoreapi.com/products",
-                FakeStoreProductDTO[].class);
+                FakeStoreProductDTO[].class); //used Array due to type erasure
 
         //System.out.println("Debug"); //to check response type
 
@@ -59,5 +62,19 @@ public class FakeStoreProductService implements ProductService{
             response.add(covertFakeStoreProductDtoToProduct(fakeStoreProductDTO));
         }
         return response;
+    }
+
+    @Override
+    public Product replaceProduct(Long id, Product product) {
+        FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
+        fakeStoreProductDTO.setTitle(product.getTitle());
+        fakeStoreProductDTO.setImage(product.getImage());
+        fakeStoreProductDTO.setDesc(product.getDescription());
+
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(fakeStoreProductDTO, FakeStoreProductDTO.class);
+        HttpMessageConverterExtractor<FakeStoreProductDTO> responseExtractor = new HttpMessageConverterExtractor(FakeStoreProductDTO.class, restTemplate.getMessageConverters());
+        FakeStoreProductDTO response =  restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PUT, requestCallback, responseExtractor);
+
+        return covertFakeStoreProductDtoToProduct(response);
     }
 }

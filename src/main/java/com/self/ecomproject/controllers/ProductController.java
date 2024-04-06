@@ -2,10 +2,7 @@ package com.self.ecomproject.controllers;
 
 import com.self.ecomproject.models.Product;
 import com.self.ecomproject.services.ProductService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,4 +30,9 @@ public class ProductController {
     //deleteProduct
     //updateProduct -- partial update (PATCH)
     //replaceProduct -- Replace (PUT)
+
+    @PutMapping("/{id}")
+    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+        return productService.replaceProduct(id,product);
+    }
 }
