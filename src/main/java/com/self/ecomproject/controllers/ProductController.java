@@ -1,5 +1,6 @@
 package com.self.ecomproject.controllers;
 
+import com.self.ecomproject.models.Category;
 import com.self.ecomproject.models.Product;
 import com.self.ecomproject.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController //This controller is going to REST APIs
 @RequestMapping("/products")
@@ -44,5 +46,23 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) {
         return productService.replaceProduct(id,product);
+    }
+
+    //Remaining
+    @GetMapping("/categories")
+    public List<Objects> getCategories() {
+        return new ArrayList<>();
+    }
+
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.GONE)
+    public void deleteProduct(@PathVariable("id") Long id) {
+        productService.deleteProduct(id);
     }
 }

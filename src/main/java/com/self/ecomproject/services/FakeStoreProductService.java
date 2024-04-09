@@ -1,5 +1,6 @@
 package com.self.ecomproject.services;
 
+import com.self.ecomproject.dtos.FakeStoreCategoryDTO;
 import com.self.ecomproject.dtos.FakeStoreProductDTO;
 import com.self.ecomproject.models.Category;
 import com.self.ecomproject.models.Product;
@@ -10,7 +11,10 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
@@ -77,4 +81,33 @@ public class FakeStoreProductService implements ProductService{
 
         return covertFakeStoreProductDtoToProduct(response);
     }
+
+    //Remaining
+    @Override
+    public List<Category> getCategory() {
+        //incomplete
+        FakeStoreCategoryDTO[] fakeStoreCategoryDTO = restTemplate.getForObject("https://fakestoreapi.com/products/categories", FakeStoreCategoryDTO[].class);
+
+        List<Objects> response = new ArrayList<>();
+        for(FakeStoreCategoryDTO fakeStoreCategoryDTO1 : fakeStoreCategoryDTO){
+            //response.add("");
+        }
+        return null;
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        product.setId(23L);
+        return product;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        FakeStoreProductDTO[] fakeStoreProductDTOs =
+                restTemplate.getForObject("https://fakestoreapi.com/products",
+                        FakeStoreProductDTO[].class);
+        Arrays.stream(fakeStoreProductDTOs).skip(id).toArray(FakeStoreProductDTO[]::new);
+    }
+
+
 }
