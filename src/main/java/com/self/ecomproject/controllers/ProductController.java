@@ -48,7 +48,7 @@ public class ProductController {
         return productService.replaceProduct(id,product);
     }
 
-    //Remaining
+    //Remainingx
     @GetMapping("/categories")
     public List<Objects> getCategories() {
         return new ArrayList<>();
